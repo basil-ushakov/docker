@@ -1,0 +1,11 @@
+name: library
+
+services:
+  debian:
+    image: registry.ushakov.by/debian
+    build:
+      context: debian
+  php-fpm:
+    image: registry.ushakov.by/php-fpm
+    build:
+      context: php-fpm

@@ -1,11 +1,31 @@
 name: library
 
 services:
+
   debian:
     image: registry.ushakov.by/debian
     build:
       context: debian
+
   php-fpm:
     image: registry.ushakov.by/php-fpm
     build:
       context: php-fpm
+    expose:
+      - 9000
+    depends_on:
+      - debian
+    restart: unless-stopped
+
+  nginx:
+    image: registry.ushakov.by/nginx
+    build:
+      context: nginx
+        #    expose:
+        #      - 80
+        #      - 443
+    ports:
+      - "80:80"
+    depends_on:
+      - debian
+    restart: unless-stopped

@@ -1,5 +1,3 @@
-name: library
-
 services:
 
   debian:
@@ -16,16 +14,18 @@ services:
     depends_on:
       - debian
     restart: unless-stopped
+    volumes:
+      - "./php-fpm/index.php:/srv/index.php"
 
   nginx:
     image: registry.ushakov.by/nginx
     build:
       context: nginx
-        #    expose:
-        #      - 80
-        #      - 443
-    ports:
-      - "80:80"
+    expose:
+      - 80
+      - 443
     depends_on:
       - debian
     restart: unless-stopped
+    volumes:
+      - "./nginx/index.php:/srv/index.php"

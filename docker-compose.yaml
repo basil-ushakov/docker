@@ -5,6 +5,17 @@ services:
     build:
       context: debian
 
+  sshd:
+    image: registry.ushakov.by/sshd
+    build:
+      context: sshd
+    ports:
+      - "33:22"
+    depends_on:
+      - debian
+    restart: unless-stopped
+
+
   php-fpm:
     image: registry.ushakov.by/php-fpm
     build:

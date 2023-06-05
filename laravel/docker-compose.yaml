@@ -1,0 +1,19 @@
+services:
+  php-fpm:
+    image: registry.ushakov.by/php-fpm
+    expose:
+      - 9000
+    restart: unless-stopped
+    volumes:
+      - ".:/srv"
+
+  nginx:
+    image: registry.ushakov.by/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - php-fpm
+    restart: unless-stopped
+    volumes:
+      - ".:/srv"
+      - "./nginx.conf:/etc/nginx/sites-enabled/default"

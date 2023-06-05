@@ -1,0 +1,34 @@
+Protocol 2
+
+AllowUsers engineer
+
+Include /etc/ssh/sshd_config.d/*.conf
+PasswordAuthentication no
+PubkeyAuthentication yes
+UsePAM no
+PermitRootLogin no
+Subsystem	sftp	/usr/lib/openssh/sftp-server
+X11Forwarding no
+PrintMotd no
+
+# Support of remote port forwarding.
+GatewayPorts yes
+
+# https://superuser.com/a/374234
+# https://askubuntu.com/a/553503
+ChallengeResponseAuthentication no
+
+# was disabled by default
+ChallengeResponseAuthentication no
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Port 22
+ListenAddress 0.0.0.0
+
+# Idle timeout interval.
+ClientAliveInterval 300
+
+# Client alive check amount.
+ClientAliveCountMax 2

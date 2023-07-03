@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mv /usr/bin/post-receive /srv/.git/post-receive
+/usr/sbin/sshd -D -e

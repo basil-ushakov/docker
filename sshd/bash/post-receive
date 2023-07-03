@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if test -f /srv/Makefile; then
+  /srv/Makefile
+else
+  GIT_WORKTREE="/srv" git checkout master && \
+    echo 'Error. No one commit pushed here.' > /dev/stderr
+fi

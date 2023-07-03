@@ -1,0 +1,55 @@
+services:
+
+  debian:
+    image: registry.ushakov.by/debian
+    build:
+      context: debian
+
+  sshd:
+    image: registry.ushakov.by/sshd
+    build:
+      context: sshd
+    ports:
+      - "33:22"
+    depends_on:
+      - debian
+    restart: unless-stopped
+
+  node:
+    image: registry.ushakov.by/node
+    build:
+      context: node
+    depends_on:
+      - debian
+
+  next:
+    image: registry.ushakov.by/next
+    build:
+      context: next
+    depends_on:
+      - node
+
+  php-fpm:
+    image: registry.ushakov.by/php-fpm
+    build:
+      context: php-fpm
+    expose:
+      - 9000
+    depends_on:
+      - debian
+    restart: unless-stopped
+    volumes:
+      - "./php-fpm/index.php:/srv/index.php"
+
+  nginx:
+    image: registry.ushakov.by/nginx
+    build:
+      context: nginx
+    expose:
+      - 80
+      - 443
+    depends_on:
+      - debian
+    restart: unless-stopped
+    volumes:
+      - "./nginx/index.php:/srv/index.php"

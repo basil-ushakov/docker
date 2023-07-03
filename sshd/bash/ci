@@ -1,4 +1,34 @@
 #!/bin/bash
 
-mv /usr/bin/post-receive /srv/.git/post-receive
+#if test -z $GIT_URL; then
+#  echo 'Error. GIT_URL environment variable is not setted up.' > /dev/stderr
+#  return 1
+#fi
+
+for developer in "/var/team/*"
+do
+  developer=`basename $developer`
+  echo developer is $developer
+  useradd -s /bin/bash -m $developer
+  # https://github.com/camptocamp/puppet-accounts/issues/35#issuecomment-770422222
+  usermod -p '*' $developer
+  usermod -aG docker $developer
+  mkdir /home/$developer/.ssh
+  cat /var/team/$developer >> /home/$developer/.ssh/authorized_keys
+  chmod 700 /home/$developer/.ssh
+  # chmod 644 /home/$developer/.ssh/id_rsa.pub
+  # chmod 600 /home/$developer/.ssh/id_rsa
+  chmod 600 /home/$developer/.ssh/authorized_keys
+  chown -R $developer:$developer /home/$developer/.ssh
+  cd /srv
+  git init project
+  git config init.defaultBranch master
+  git config receive.denyCurrentBranch ignore
+  cp /usr/bin/post-receive    /home/$developer/project/.git/hooks/post-receive
+  chown -R $developer:$developer /srv
+  mkdir /home/$developer/.docker
+  cp /var/docker_registry.json /home/$developer/.docker/config.json
+  chown $developer:$developer /home/$developer/.docker
+done
+
 /usr/sbin/sshd -D -e

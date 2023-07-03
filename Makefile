@@ -1,3 +1,5 @@
+#!/usr/bin/env -S make -C /srv -f
+
 design/pushed: design/builded
 	docker login registry.ushakov.by
 	docker compose push | tee -a $@

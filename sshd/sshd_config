@@ -1,6 +1,6 @@
 Protocol 2
 
-AllowUsers engineer
+# AllowUsers engineer
 
 Include /etc/ssh/sshd_config.d/*.conf
 PasswordAuthentication no

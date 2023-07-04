@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-GIT_WORKTREE="/srv" GIT_DIR="/srv/.git" git reset --hard master  || \
+GIT_WORK_TREE="/srv" GIT_DIR="/srv/.git" sudo --preserve-env git reset --hard master  || \
   echo 'Error, git reset.' > /dev/stderr
-GIT_WORKTREE="/srv" GIT_DIR="/srv/.git" git checkout master || \
+GIT_WORK_TREE="/srv" GIT_DIR="/srv/.git" sudo --preserve-env git checkout master || \
   echo 'Error, git checkout.' > /dev/stderr
-
 if test -f /srv/Makefile; then
-  /srv/Makefile
+  cd /srv && sudo make
 fi

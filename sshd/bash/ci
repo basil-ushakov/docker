@@ -5,14 +5,30 @@
 #  return 1
 #fi
 
-for developer in "/var/team/*"
+set -x
+
+groupadd ci
+
+if test ! -d /srv/.git; then
+  chgrp -R ci /srv
+  chmod -R g+rw /srv
+  chmod g+s `find /srv -type d`
+  cd /srv
+  git init --shared=all
+  git config init.defaultBranch master
+  git config receive.denyCurrentBranch ignore
+  cp /usr/bin/post-receive /srv/.git/hooks/post-receive
+fi
+
+echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+for developer in `ls /var/team`
 do
   developer=`basename $developer`
-  echo developer is $developer
-  useradd -s /bin/bash -m $developer
+  useradd -s /usr/bin/git-shell -m $developer
   # https://github.com/camptocamp/puppet-accounts/issues/35#issuecomment-770422222
   usermod -p '*' $developer
-  usermod -aG docker $developer
+  usermod -aG docker,sudo,ci $developer
   mkdir /home/$developer/.ssh
   cat /var/team/$developer >> /home/$developer/.ssh/authorized_keys
   chmod 700 /home/$developer/.ssh
@@ -20,15 +36,8 @@ do
   # chmod 600 /home/$developer/.ssh/id_rsa
   chmod 600 /home/$developer/.ssh/authorized_keys
   chown -R $developer:$developer /home/$developer/.ssh
-  cd /srv
-  git init project
-  git config init.defaultBranch master
-  git config receive.denyCurrentBranch ignore
-  cp /usr/bin/post-receive    /home/$developer/project/.git/hooks/post-receive
-  chown -R $developer:$developer /srv
-  mkdir /home/$developer/.docker
-  cp /var/docker_registry.json /home/$developer/.docker/config.json
-  chown $developer:$developer /home/$developer/.docker
 done
+
+set +x
 
 /usr/sbin/sshd -D -e

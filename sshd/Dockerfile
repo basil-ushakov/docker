@@ -3,7 +3,7 @@ user root
 run \
   apt update && \
   apt full-upgrade -y
-run apt install openssh-server git make -y
+run apt install openssh-server git make sudo -y
 run \
   install -m 0755 -d /etc/apt/keyrings && \
   curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \

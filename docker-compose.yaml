@@ -1,5 +1,7 @@
-services:
+volumes:
+  project:
 
+services:
   debian:
     image: registry.ushakov.by/debian
     build:
@@ -17,7 +19,8 @@ services:
     privileged: true
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "~/.docker/config.json:/var/docker_registry.json"
+      - "/root/.docker/config.json:/root/.docker/config.json"
+      - "project:/srv"
 
   node:
     image: registry.ushakov.by/node

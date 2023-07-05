@@ -6,6 +6,13 @@ services:
     image: registry.ushakov.by/debian
     build:
       context: debian
+    tty: true
+
+  debian_ci:
+    image: registry.ushakov.by/debian_ci
+    build:
+      context: debian
+    tty: true
 
   sshd:
     image: registry.ushakov.by/sshd
@@ -31,6 +38,7 @@ services:
 
   next:
     image: registry.ushakov.by/next
+    tty: true
     build:
       context: next
     depends_on:

@@ -1,4 +1,4 @@
-from registry.ushakov.by/debian
+from registry.ushakov.by/debian_ci
 run \
   apt update && \
   apt full-upgrade -y
